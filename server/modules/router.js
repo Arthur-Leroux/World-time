@@ -1,14 +1,12 @@
 //pour créer un router j'ai besoin d'express
 const express = require(`express`);
 const options = require(`./otpions`);
+const dayjs = require(`./dayjs`);
 
-
-
-const capitalCities = require(`./capitalCties`);
+const capitalCities = require(`./capitalCities`);
 
 //j'instancie mon router
 
-//console.log(timeZone);
 const router = express.Router();
 
 router.get(`/`, (req, res) => {
@@ -16,13 +14,37 @@ router.get(`/`, (req, res) => {
   res.status(200);
 });
 
-router.get(`/city/:name`, (req, res) => {
-
-    for(element of capitalCities){
-        console.log(element.tz)
-        res.send(`je suis la ville de ${req.params.name}. Mon fuseau horaire est : ${element}`);
-    }
-
+router.get(`/city/:city`, (req, res) => {
+  const city = req.params.city;
+  //on doit comparer o_city avec city
+  //
+  const found = capitalCities.find(function (o_city) {
+    return o_city.name.toLocaleLowerCase() === city;
+  });
+  //console.log(found.name);
+if(found){
+  res.send(
+    `<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Liste des grandes capitales du monde</title>
+    </head>
+    <body>
+    <h1>bienvenue à ${city} ! </h1>
+     nous sommes ${dayjs
+      .tz(dayjs(), found.tz)
+      .format(`dddd DD MMMM YYYY`)}
+     <p>est il est ${dayjs.utc(dayjs(), found.tz).format(`HH[h]mm[ et ]ss`)}</p>
+      </body>
+      </html>`
+    
+  )}else{
+    res.send(`cette ville n'existe pas dans notre base de données`);
+    
+  };
 });
 
 module.exports = router;

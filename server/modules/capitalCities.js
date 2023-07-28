@@ -22,6 +22,7 @@ const capitalCities = [
         name: "Moscou",
         tz: "Europe/Moscow"
     }
+    
 ];
 
 // On exporte notre module afin qu'il soit accessible depuis l'exterieur
