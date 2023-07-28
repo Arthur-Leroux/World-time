@@ -22,9 +22,9 @@ router.get(`/city/:city`, (req, res) => {
     return o_city.name.toLocaleLowerCase() === city;
   });
   //console.log(found.name);
-if(found){
-  res.send(
-    `<!DOCTYPE html>
+  if (found) {
+    res.send(
+      `<!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -34,17 +34,17 @@ if(found){
     </head>
     <body>
     <h1>bienvenue à ${city} ! </h1>
-     nous sommes ${dayjs
-      .tz(dayjs(), found.tz)
-      .format(`dddd DD MMMM YYYY`)}
+     nous sommes ${dayjs.tz(dayjs(), found.tz).format(`dddd DD MMMM YYYY`)}
      <p>est il est ${dayjs.utc(dayjs(), found.tz).format(`HH[h]mm[ et ]ss`)}</p>
       </body>
       </html>`
-    
-  )}else{
-    res.send(`cette ville n'existe pas dans notre base de données`);
-    
+    );
   };
+  res.redirect(`/404`);
 });
-
+router.get(`/404`, (req, res) => {
+  res.status(404);
+  res.sendFile(`404.html`, options);
+  
+});
 module.exports = router;
